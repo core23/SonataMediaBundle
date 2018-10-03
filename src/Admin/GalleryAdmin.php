@@ -16,6 +16,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\CoreBundle\Form\Type\CollectionType;
+use Sonata\MediaBundle\Model\GalleryInterface;
 use Sonata\MediaBundle\Provider\Pool;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
@@ -49,6 +50,16 @@ class GalleryAdmin extends AbstractAdmin
         $parameters = $this->getPersistentParameters();
 
         $gallery->setContext($parameters['context']);
+    }
+
+    /**
+     * @param GalleryInterface $object
+     */
+    public function preValidate($object)
+    {
+        foreach ($object->getGalleryHasMedias() as $media) {
+            $media->setGallery($object);
+        }
     }
 
     /**
